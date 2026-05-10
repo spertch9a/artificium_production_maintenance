@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Production Stop Menu under Manufacturing -->
+    <menuitem id="menu_production_stop"
+              name="Arrêts de Production"
+              parent="mrp.menu_mrp_manufacturing"
+              action="action_production_stop"
+              sequence="50"/>
+</odoo>

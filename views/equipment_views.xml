@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Maintenance Equipment Form View -->
+    <record id="hr_equipment_view_form_inherit_production" model="ir.ui.view">
+        <field name="name">maintenance.equipment.form.inherit.production</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='maintenance']" position="inside">
+                <group string="Production">
+                    <field name="workcenter_id"/>
+                    <field name="production_capacity"/>
+                    <field name="downtime_cost_per_hour"/>
+                    <field name="currency_id"/>
+                </group>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_production_stops" type="object" class="oe_stat_button" icon="fa-stop-circle">
+                    <field name="total_downtime_hours" widget="statinfo" string="Heures d'arrêt"/>
+                </button>
+                <button name="action_view_production_stops" type="object" class="oe_stat_button" icon="fa-line-chart">
+                    <field name="availability_rate" widget="statinfo" string="Disponibilite %"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='maintenance']" position="inside">
+                <group string="KPIs" groups="maintenance.group_equipment_manager">
+                    <field name="mtbf"/>
+                    <field name="mttr"/>
+                    <field name="total_downtime_hours" readonly="1"/>
+                    <field name="availability_rate" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

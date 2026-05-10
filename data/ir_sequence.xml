@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sequence_production_stop" model="ir.sequence">
+            <field name="name">Production Stop</field>
+            <field name="code">production.stop</field>
+            <field name="prefix">STOP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

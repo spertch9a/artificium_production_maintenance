@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Maintenance Request Form View -->
+    <record id="hr_equipment_request_view_form_inherit_production" model="ir.ui.view">
+        <field name="name">maintenance.request.form.inherit.production</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='maintenance_type']" position="after">
+                <field name="affects_production"/>
+                <field name="priority_level" widget="priority"/>
+            </xpath>
+            <xpath expr="//field[@name='affects_production']" position="after">
+                <field name="production_manager_id" invisible="not affects_production"/>
+                <field name="production_team_id" invisible="not affects_production"/>
+                <field name="scheduled_production_stop" invisible="not affects_production"/>
+                <field name="production_stop_duration" invisible="not affects_production"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_schedule_production_stop" string="Programmer Arret Production" type="object" class="oe_highlight" invisible="not affects_production or scheduled_production_stop"/>
+                <button name="action_notify_production" string="Notifier Production" type="object" invisible="not affects_production or notification_sent" class="btn-info"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

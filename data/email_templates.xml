@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email Template: Maintenance Notification -->
+        <record id="email_template_maintenance_notification" model="mail.template">
+            <field name="name">Maintenance: Notification Production</field>
+            <field name="model_id" ref="maintenance.model_maintenance_request"/>
+            <field name="subject">ALERTE: Maintenance planifiée - ${object.equipment_id.name}</field>
+            <field name="email_from">${object.company_id.email or 'noreply@localhost'}</field>
+            <field name="email_to">${object.production_manager_id.email or ''}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; font-size: 14px;">
+                    <p style="color: #dc3545; font-size: 18px;"><strong>ALERTE MAINTENANCE - ARRET PRODUCTION</strong></p>
+                    <p>Bonjour,</p>
+                    <p>Une maintenance necessitant un arret de la production a ete planifiee :</p>
+                    <table style="border-collapse: collapse; width: 100%; margin: 20px 0;">
+                        <tr style="background-color: #f0f0f0;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Equipement</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${object.equipment_id.name}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Maintenance</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${object.name}</td>
+                        </tr>
+                        <tr style="background-color: #f0f0f0;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Date prevue</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${object.schedule_date}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Duree estimee</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${object.production_stop_duration or 'Non definie'} heures</td>
+                        </tr>
+                    </table>
+                    <p>Veuillez prendre les dispositions necessaires pour planifier cet arret.</p>
+                    <p style="font-size: 12px; color: #666;">Cet email a ete envoye automatiquement par le systeme de maintenance SAPE.</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

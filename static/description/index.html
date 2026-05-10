@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Production-Maintenance Integration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+        .hero {
+            background: linear-gradient(135deg, #1a6aad 0%, #0d4a7c 100%);
+            color: #fff;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.6em;
+            margin: 0 0 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 30px;
+        }
+        .section h2 {
+            font-size: 1.8em;
+            color: #1a6aad;
+            border-bottom: 3px solid #1a6aad;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+        .feature-card {
+            background: #f7f9fc;
+            border-left: 4px solid #1a6aad;
+            border-radius: 6px;
+            padding: 22px 20px;
+        }
+        .feature-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .feature-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.05em;
+            color: #0d4a7c;
+        }
+        .feature-card p {
+            margin: 0;
+            font-size: 0.93em;
+            line-height: 1.5;
+            color: #555;
+        }
+        .workflow-block {
+            background: #eef4fb;
+            border-radius: 8px;
+            padding: 28px 30px;
+            margin-bottom: 30px;
+        }
+        .workflow-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .step {
+            background: #1a6aad;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .arrow {
+            color: #1a6aad;
+            font-size: 1.4em;
+            margin: 0 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background: #1a6aad;
+            color: #fff;
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9em;
+        }
+        tr:nth-child(even) td {
+            background: #f7f9fc;
+        }
+        .kpi-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .kpi-card {
+            flex: 1;
+            min-width: 160px;
+            background: #fff;
+            border: 2px solid #1a6aad;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .kpi-card .number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #1a6aad;
+        }
+        .kpi-card .label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 4px;
+        }
+        .compatibility {
+            background: #f0f7ee;
+            border-left: 4px solid #28a745;
+            border-radius: 6px;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+        .compatibility h3 {
+            margin: 0 0 10px;
+            color: #1a7a35;
+        }
+        .version-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .version-badge {
+            background: #28a745;
+            color: #fff;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+        .footer {
+            background: #0d4a7c;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #7ec8f5;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+    <h1>⚙️ Production-Maintenance Integration</h1>
+    <p>
+        Automatically bridge your Production and Maintenance teams — notify, schedule,
+        track, and report production stops triggered by maintenance events.
+    </p>
+    <div class="badge-row">
+        <span class="badge">Odoo 16 · 17 · 18 · 19</span>
+        <span class="badge">LGPL-3</span>
+        <span class="badge">by EURL ARTIFICIUM</span>
+    </div>
+</div>
+
+<!-- ===== OVERVIEW ===== -->
+<div class="section">
+    <h2>What Does This Module Do?</h2>
+    <p>
+        When a maintenance team schedules a preventive or corrective intervention that requires
+        stopping the production line, <strong>this module automates the entire communication
+        and scheduling workflow</strong>:
+    </p>
+    <ul style="line-height:2; font-size:0.97em;">
+        <li>The production manager is <strong>notified by email and activity</strong> immediately.</li>
+        <li>A <strong>Production Stop record</strong> is created and tracked through its full lifecycle.</li>
+        <li>Manufacturing orders are <strong>linked to maintenance requests</strong> for full traceability.</li>
+        <li>Equipment availability, MTBF, MTTR, and downtime costs are <strong>computed automatically</strong>.</li>
+    </ul>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <div class="number">4</div>
+            <div class="label">Extended Odoo Models</div>
+        </div>
+        <div class="kpi-card">
+            <div class="number">1</div>
+            <div class="label">New Model (production.stop)</div>
+        </div>
+        <div class="kpi-card">
+            <div class="number">7</div>
+            <div class="label">Stop Reason Categories</div>
+        </div>
+        <div class="kpi-card">
+            <div class="number">5</div>
+            <div class="label">Lifecycle States</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FEATURES ===== -->
+<div style="background:#f0f5ff; padding:10px 0;">
+<div class="section">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="icon">🔔</div>
+            <h3>Automatic Notifications</h3>
+            <p>Email and Odoo activity sent to the production manager the moment a maintenance
+               with production impact is scheduled.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🛑</div>
+            <h3>Production Stop Management</h3>
+            <p>Full lifecycle tracking from Draft to Done, with planned duration, actual duration
+               computed from real start/end timestamps.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Equipment KPIs</h3>
+            <p>Automatic computation of availability rate, total downtime hours, MTBF, MTTR,
+               and downtime cost per hour.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔗</div>
+            <h3>Order Traceability</h3>
+            <p>Link manufacturing orders to maintenance requests and production stops for
+               complete cross-module traceability.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📋</div>
+            <h3>Stop Reporting</h3>
+            <p>Filter and group production stops by equipment, team, reason, date, or
+               impact level (None / Minor / Major / Critical).</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">✉️</div>
+            <h3>Ready-Made Email Template</h3>
+            <p>Professional HTML email template pre-loaded — no configuration needed,
+               dispatched automatically on scheduling.</p>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== WORKFLOW ===== -->
+<div class="section">
+    <h2>Production Stop Lifecycle</h2>
+    <div class="workflow-block">
+        <p style="margin:0; color:#555; font-size:0.95em;">
+            A production stop follows a clear, audited workflow with state tracking and chatter logging:
+        </p>
+        <div class="workflow-steps">
+            <div class="step">Draft</div>
+            <div class="arrow">→</div>
+            <div class="step">Scheduled</div>
+            <div class="arrow">→</div>
+            <div class="step">In Progress</div>
+            <div class="arrow">→</div>
+            <div class="step">Done</div>
+            <div class="arrow" style="color:#dc3545;">↘</div>
+            <div class="step" style="background:#dc3545;">Cancelled</div>
+        </div>
+    </div>
+
+    <h2>Notification Workflow</h2>
+    <div class="workflow-block">
+        <div class="workflow-steps">
+            <div class="step">Maintenance Scheduled</div>
+            <div class="arrow">→</div>
+            <div class="step">Affects Production? ✓</div>
+            <div class="arrow">→</div>
+            <div class="step">Email Sent</div>
+            <div class="arrow">→</div>
+            <div class="step">Activity Created</div>
+            <div class="arrow">→</div>
+            <div class="step">Stop Record Created</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODELS ===== -->
+<div style="background:#f0f5ff; padding:10px 0;">
+<div class="section">
+    <h2>Data Models</h2>
+
+    <h3 style="color:#0d4a7c;">New: <code>production.stop</code></h3>
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>name</code></td><td>Char (sequence)</td><td>Auto-generated reference (STOP/YYYY/XXXX)</td></tr>
+        <tr><td><code>state</code></td><td>Selection</td><td>draft / scheduled / in_progress / done / cancel</td></tr>
+        <tr><td><code>equipment_id</code></td><td>Many2one</td><td>Equipment causing the stop (required)</td></tr>
+        <tr><td><code>scheduled_date</code></td><td>Datetime</td><td>Planned stop date (required)</td></tr>
+        <tr><td><code>duration</code></td><td>Float</td><td>Planned duration in hours</td></tr>
+        <tr><td><code>actual_duration</code></td><td>Float (computed)</td><td>Real duration = end − start</td></tr>
+        <tr><td><code>reason</code></td><td>Selection</td><td>Preventive / Corrective / Breakdown / Changeover / Material shortage / Quality / Other</td></tr>
+        <tr><td><code>impact_production</code></td><td>Selection</td><td>None / Minor / Major / Critical</td></tr>
+    </table>
+
+    <h3 style="color:#0d4a7c; margin-top:30px;">Extended: <code>maintenance.request</code></h3>
+    <table>
+        <tr><th>Field Added</th><th>Description</th></tr>
+        <tr><td><code>affects_production</code></td><td>Flag — does this maintenance require a production stop?</td></tr>
+        <tr><td><code>production_manager_id</code></td><td>User to notify (auto-detected from mrp.group_mrp_manager)</td></tr>
+        <tr><td><code>production_stop_duration</code></td><td>Estimated stop duration in hours</td></tr>
+        <tr><td><code>production_orders_ids</code></td><td>Linked manufacturing orders (Many2many)</td></tr>
+        <tr><td><code>priority_level</code></td><td>Low / Medium / High / Critical</td></tr>
+        <tr><td><code>notification_sent</code></td><td>Boolean — prevents duplicate notifications</td></tr>
+    </table>
+
+    <h3 style="color:#0d4a7c; margin-top:30px;">Extended: <code>maintenance.equipment</code></h3>
+    <table>
+        <tr><th>Field Added</th><th>Description</th></tr>
+        <tr><td><code>workcenter_id</code></td><td>Link to mrp.workcenter (production line)</td></tr>
+        <tr><td><code>total_downtime_hours</code></td><td>Computed sum of all done production stops</td></tr>
+        <tr><td><code>availability_rate</code></td><td>Computed availability % (8760h/year base)</td></tr>
+        <tr><td><code>downtime_cost_per_hour</code></td><td>Cost field for financial impact analysis</td></tr>
+        <tr><td><code>mtbf</code> / <code>mttr</code></td><td>Mean Time Between Failures / Mean Time To Repair</td></tr>
+    </table>
+</div>
+</div>
+
+<!-- ===== SECURITY ===== -->
+<div class="section">
+    <h2>Access Rights</h2>
+    <table>
+        <tr><th>Group</th><th>Access Level</th></tr>
+        <tr><td>Maintenance Manager (<code>maintenance.group_equipment_manager</code>)</td><td>Full access (create, read, write, delete)</td></tr>
+        <tr><td>Manufacturing Manager (<code>mrp.group_mrp_manager</code>)</td><td>Full access</td></tr>
+        <tr><td>Manufacturing User (<code>mrp.group_mrp_user</code>)</td><td>Read only</td></tr>
+    </table>
+</div>
+
+<!-- ===== COMPATIBILITY ===== -->
+<div style="background:#f0f5ff; padding:10px 0;">
+<div class="section">
+    <h2>Compatibility</h2>
+    <div class="compatibility">
+        <h3>✅ Supported Odoo Versions</h3>
+        <div class="version-badges">
+            <span class="version-badge">Odoo 16.0</span>
+            <span class="version-badge">Odoo 17.0</span>
+            <span class="version-badge">Odoo 18.0</span>
+            <span class="version-badge">Odoo 19.0</span>
+        </div>
+        <p style="margin-top:14px; color:#555; font-size:0.9em;">
+            Compatible with both Community and Enterprise editions.<br/>
+            Required modules: <code>mrp</code>, <code>maintenance</code>, <code>mail</code>, <code>hr</code>
+        </p>
+    </div>
+
+    <h2>Installation</h2>
+    <ol style="line-height:2; font-size:0.95em;">
+        <li>Copy the <code>artificium_production_maintenance</code> folder into your Odoo addons path.</li>
+        <li>Restart the Odoo server.</li>
+        <li>Go to <strong>Apps</strong>, search for <em>Production-Maintenance Integration</em>, and click <strong>Install</strong>.</li>
+        <li>Make sure <code>mrp</code> and <code>maintenance</code> modules are installed first.</li>
+    </ol>
+</div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+    <p>
+        <strong>Production-Maintenance Integration</strong> — by
+        <a href="https://www.artificium.dz">EURL ARTIFICIUM</a>
+    </p>
+    <p>License: LGPL-3 &nbsp;|&nbsp; Version 1.0.0 &nbsp;|&nbsp; Odoo 16 · 17 · 18 · 19</p>
+</div>
+
+</body>
+</html>
