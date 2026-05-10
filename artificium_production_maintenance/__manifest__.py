@@ -59,5 +59,7 @@ Dependencies: ``mrp``, ``maintenance``, ``mail``, ``hr``
     'installable': True,
     'auto_install': False,
     'application': True,
+    'price': 190.00,
+    'currency': 'EUR',
     'license': 'LGPL-3',
 }
